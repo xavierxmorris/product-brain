@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Impact | Contoso Outdoor Gear</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: { extend: {
+                fontFamily: { display:['Outfit','sans-serif'], serif:['Source Serif 4','Georgia','serif'] },
+                colors: {
+                    sage:{50:'#f6f7f6',100:'#e3e5e3',200:'#c7ccc7',300:'#a3aba3',400:'#7c877c',500:'#7a9b7e',600:'#5a7b5e',700:'#404640',800:'#363b36',900:'#2f322f'},
+                    forest:{400:'#4ade80',500:'#22c55e',600:'#16a34a'},
+                    ember:{400:'#fb923c',500:'#f97316',600:'#ea580c'},
+                }
+            }}
+        }
+    </script>
+    <style>
+        :root{--bg:#0a0c0a;--card:rgba(17,20,17,0.85);--border:rgba(163,171,163,0.15);--txt:#e8ebe8;--muted:#a3aba3;}
+        body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;}
+        .ambient{position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(74,222,128,0.06) 0%,transparent 50%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(249,115,22,0.04) 0%,transparent 50%),var(--bg);}
+        h1,h2,h3{font-family:'Source Serif 4',Georgia,serif;letter-spacing:-0.02em;}
+        .card{background:var(--card);border-radius:16px;border:1px solid var(--border);backdrop-filter:blur(20px);}
+        .card:hover{border-color:rgba(74,222,128,0.3);box-shadow:0 0 30px rgba(74,222,128,0.05);}
+        .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:0.7rem;font-weight:600;}
+        @keyframes pop{0%{transform:scale(0.8);opacity:0}100%{transform:scale(1);opacity:1}}
+        .pop-in{animation:pop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;}
+        @keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(74,222,128,0.4)}70%{box-shadow:0 0 0 10px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+        .pulse{animation:pulse-ring 2s infinite;}
+        @keyframes confetti{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(-40px) rotate(360deg);opacity:0}}
+        .share-card-bg{background:linear-gradient(135deg,#111411 0%,#1a2e1a 50%,#111411 100%);border:1px solid rgba(74,222,128,0.2);}
+    </style>
+</head>
+<body x-data="app()" x-init="init()">
+<div class="ambient"></div>
+
+<!-- Nav -->
+<nav class="sticky top-0 z-50 backdrop-blur-xl border-b border-white/5">
+    <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-forest-400/20 flex items-center justify-center">
+                <svg class="w-5 h-5 text-forest-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <span class="font-display font-semibold text-sm tracking-wide">CONTOSO OUTDOOR</span>
+        </div>
+        <div class="flex items-center gap-5 text-sm text-sage-300">
+            <a href="#" class="text-forest-400 font-medium">My Impact</a>
+            <!-- Streak badge -->
+            <div class="badge bg-ember-500/20 text-ember-400">🔥 12-week streak</div>
+            <div class="w-8 h-8 rounded-full bg-sage-700 flex items-center justify-center text-xs font-medium">JT</div>
+        </div>
+    </div>
+</nav>
+
+<!-- ═══ LEVEL + XP HERO ═══ -->
+<header class="max-w-5xl mx-auto px-6 pt-10 pb-6">
+    <div class="card p-6 flex items-center gap-6">
+        <!-- Level ring -->
+        <div class="relative flex-shrink-0">
+            <svg viewBox="0 0 80 80" class="w-24 h-24">
+                <circle cx="40" cy="40" r="34" fill="none" stroke="#2f322f" stroke-width="5"/>
+                <circle cx="40" cy="40" r="34" fill="none" stroke="#4ade80" stroke-width="5"
+                        stroke-dasharray="171 214" stroke-linecap="round"
+                        transform="rotate(-90 40 40)" style="transition:stroke-dashoffset 1.5s ease-out"/>
+                <text x="40" y="36" text-anchor="middle" fill="#4ade80" font-size="18" font-weight="800" font-family="Outfit">7</text>
+                <text x="40" y="48" text-anchor="middle" fill="#a3aba3" font-size="8" font-family="Outfit">LEVEL</text>
+            </svg>
+            <div class="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-forest-400 flex items-center justify-center text-xs text-[#0a0c0a] font-bold pulse">🌿</div>
+        </div>
+        <div class="flex-1">
+            <p class="text-sage-400 text-xs uppercase tracking-widest mb-1">Eco Ranger · Gold Member</p>
+            <h1 class="text-2xl font-bold mb-1">Jordan's Green Journey</h1>
+            <div class="flex items-center gap-2 mb-2">
+                <div class="flex-1 h-2.5 rounded-full bg-sage-800">
+                    <div class="h-full rounded-full bg-gradient-to-r from-forest-600 to-forest-400 transition-all duration-1000" style="width:80%"></div>
+                </div>
+                <span class="text-forest-400 text-xs font-semibold tabular-nums">2,400 / 3,000 XP</span>
+            </div>
+            <p class="text-sage-400 text-xs">600 XP to <strong class="text-forest-400">Level 8 — Trail Guardian</strong>. Earn XP with every eco purchase, trade-in, or carbon upgrade.</p>
+        </div>
+        <button @click="showShare = true" class="px-4 py-2.5 rounded-xl bg-forest-400/10 border border-forest-400/20 text-forest-400 text-sm font-medium hover:bg-forest-400/20 transition flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+            Share
+        </button>
+    </div>
+</header>
+
+<!-- ═══ STATS ROW ═══ -->
+<section class="max-w-5xl mx-auto px-6 pb-6">
+    <div class="grid grid-cols-4 gap-3">
+        <div class="card p-4 text-center pop-in" style="animation-delay:0.1s">
+            <p class="text-3xl font-bold text-forest-400 tabular-nums" x-text="co2">0</p>
+            <p class="text-sage-400 text-xs">kg CO₂ offset</p>
+        </div>
+        <div class="card p-4 text-center pop-in" style="animation-delay:0.2s">
+            <p class="text-3xl font-bold text-forest-400 tabular-nums" x-text="trees">0</p>
+            <p class="text-sage-400 text-xs">trees planted</p>
+        </div>
+        <div class="card p-4 text-center pop-in" style="animation-delay:0.3s">
+            <p class="text-3xl font-bold text-forest-400 tabular-nums" x-text="eco">0</p>
+            <p class="text-sage-400 text-xs">eco items (67%)</p>
+        </div>
+        <div class="card p-4 text-center pop-in" style="animation-delay:0.4s">
+            <p class="text-3xl font-bold text-forest-400 tabular-nums" x-text="plastic">0</p>
+            <p class="text-sage-400 text-xs">kg plastic avoided</p>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ BADGES + MILESTONES ═══ -->
+<section class="max-w-5xl mx-auto px-6 pb-6">
+    <div class="card p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg">Badges & Milestones</h2>
+            <span class="text-sage-400 text-xs">8 of 24 unlocked</span>
+        </div>
+        <div class="grid grid-cols-4 md:grid-cols-8 gap-3">
+            <template x-for="b in badges" :key="b.name">
+                <div class="flex flex-col items-center gap-1 group cursor-pointer" :title="b.name">
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl transition-transform group-hover:scale-110"
+                         :class="b.earned ? 'bg-forest-400/15 border border-forest-400/30' : 'bg-sage-800/60 border border-sage-700/30 grayscale opacity-40'">
+                        <span x-text="b.icon"></span>
+                    </div>
+                    <span class="text-[9px] text-center leading-tight"
+                          :class="b.earned ? 'text-sage-300' : 'text-sage-400/40'" x-text="b.name"></span>
+                </div>
+            </template>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ WEEKLY CHALLENGE ═══ -->
+<section class="max-w-5xl mx-auto px-6 pb-6">
+    <div class="card p-6 border-l-4 border-l-ember-500">
+        <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-ember-500/15 flex items-center justify-center text-2xl flex-shrink-0">🎯</div>
+            <div class="flex-1">
+                <p class="text-ember-400 text-xs font-semibold uppercase tracking-wide mb-1">This Week's Challenge</p>
+                <h3 class="text-lg mb-1">The Full Green Cart</h3>
+                <p class="text-sage-300 text-sm mb-3">Make your next order 100% eco-certified to earn the <strong class="text-forest-400">Green Cart Badge</strong> + 500 XP.</p>
+                <div class="flex items-center gap-3 text-xs">
+                    <div class="flex-1 h-2 rounded-full bg-sage-800">
+                        <div class="h-full rounded-full bg-ember-500 transition-all" style="width:0%"></div>
+                    </div>
+                    <span class="text-sage-400">0/1 qualifying orders</span>
+                    <span class="badge bg-ember-500/20 text-ember-400">+500 XP</span>
+                </div>
+            </div>
+            <div class="text-right flex-shrink-0">
+                <p class="text-sage-400 text-[10px]">Ends in</p>
+                <p class="text-xl font-bold text-ember-400 tabular-nums">4d 12h</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ LEADERBOARD ═══ -->
+<section class="max-w-5xl mx-auto px-6 pb-6">
+    <div class="card p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg">Community Leaderboard</h2>
+            <div class="flex gap-2">
+                <button class="badge bg-forest-400/15 text-forest-400">Friends</button>
+                <button class="badge bg-sage-800 text-sage-400">All Members</button>
+            </div>
+        </div>
+        <div class="space-y-2">
+            <template x-for="(user, i) in leaderboard" :key="i">
+                <div class="flex items-center gap-3 p-3 rounded-xl transition"
+                     :class="user.you ? 'bg-forest-400/10 border border-forest-400/20' : 'bg-sage-900/40 border border-transparent'">
+                    <span class="w-6 text-center font-bold tabular-nums" :class="i<3 ? 'text-ember-400' : 'text-sage-400'" x-text="i+1"></span>
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium"
+                         :class="user.you ? 'bg-forest-400 text-[#0a0c0a]' : 'bg-sage-700'" x-text="user.initials"></div>
+                    <div class="flex-1">
+                        <span class="text-sm font-medium" x-text="user.name"></span>
+                        <span x-show="user.you" class="badge bg-forest-400/20 text-forest-400 ml-2 text-[9px]">You</span>
+                    </div>
+                    <span class="text-sm tabular-nums" :class="user.you ? 'text-forest-400 font-semibold' : 'text-sage-300'" x-text="user.co2 + ' kg'"></span>
+                    <span class="badge text-[9px]" :class="user.you ? 'bg-forest-400/15 text-forest-400' : 'bg-sage-800 text-sage-400'" x-text="'Lv ' + user.level"></span>
+                </div>
+            </template>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ TRADE-IN + ECO UPGRADE ═══ -->
+<section class="max-w-5xl mx-auto px-6 pb-6 grid lg:grid-cols-2 gap-3">
+    <!-- Trade-In -->
+    <div class="card p-6">
+        <div class="flex items-center gap-2 mb-3">
+            <span class="text-lg">♻️</span>
+            <h2 class="text-lg">Trade-In for XP</h2>
+        </div>
+        <p class="text-sage-300 text-xs mb-4">Trade in old gear for Trail Points + bonus XP toward your next level.</p>
+        <div class="p-3 rounded-xl bg-sage-900/50 border border-white/5 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-sage-800 flex items-center justify-center text-xl">🎒</div>
+            <div class="flex-1">
+                <p class="text-sm font-medium">Ridge 45L Backpack</p>
+                <p class="text-sage-400 text-[10px]">Condition: Good · Purchased 2024</p>
+            </div>
+            <div class="text-right">
+                <p class="text-sm font-bold text-ember-400">2,400 pts</p>
+                <span class="badge bg-forest-400/15 text-forest-400 text-[9px]">+200 XP</span>
+            </div>
+        </div>
+        <button class="mt-3 w-full py-2.5 rounded-xl bg-sage-700/50 border border-white/10 text-sm font-medium hover:bg-sage-700 transition">Start Trade-In →</button>
+    </div>
+    <!-- Carbon Upgrade -->
+    <div class="card p-6">
+        <div class="flex items-center gap-2 mb-3">
+            <span class="text-lg">⚡</span>
+            <h2 class="text-lg">Carbon Positive Upgrade</h2>
+        </div>
+        <p class="text-sage-300 text-xs mb-4">Triple your offset at checkout and earn bonus XP.</p>
+        <div class="p-4 rounded-xl bg-ember-500/10 border border-ember-500/15 text-center">
+            <p class="text-sm text-sage-300 mb-1">Your current cart</p>
+            <p class="text-3xl font-bold text-forest-400 mb-1">26.1 <span class="text-sm font-normal text-sage-400">kg CO₂</span></p>
+            <p class="text-sage-400 text-xs mb-3">offset included free</p>
+            <div class="flex items-center justify-center gap-3">
+                <button class="px-5 py-2.5 rounded-lg bg-ember-500 text-white text-sm font-semibold hover:bg-ember-600 transition">
+                    Go 3× for $2.00
+                </button>
+                <span class="badge bg-forest-400/15 text-forest-400">+150 XP</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ SHARE MODAL ═══ -->
+<div x-show="showShare" x-transition class="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/70 backdrop-blur-sm" @click.self="showShare = false">
+    <div class="w-full max-w-sm" @click.stop>
+        <div class="share-card-bg rounded-2xl p-8 text-center mb-4">
+            <div class="w-20 h-20 mx-auto rounded-full bg-forest-400/20 border-2 border-forest-400/40 flex items-center justify-center mb-3">
+                <span class="text-3xl">🌿</span>
+            </div>
+            <p class="text-sage-400 text-[10px] uppercase tracking-widest mb-1">Contoso Eco Ranger · Level 7</p>
+            <p class="text-4xl font-bold text-forest-400 font-serif" x-text="co2 + ' kg'"></p>
+            <p class="text-sage-300 text-sm mb-4">CO₂ offset this year</p>
+            <div class="grid grid-cols-3 gap-2 text-center mb-4">
+                <div><p class="text-lg font-bold text-forest-400" x-text="trees"></p><p class="text-[9px] text-sage-400">trees</p></div>
+                <div><p class="text-lg font-bold text-forest-400">8</p><p class="text-[9px] text-sage-400">badges</p></div>
+                <div><p class="text-lg font-bold text-ember-400">12w</p><p class="text-[9px] text-sage-400">streak</p></div>
+            </div>
+            <div class="flex flex-wrap justify-center gap-1">
+                <template x-for="b in badges.filter(b=>b.earned)" :key="b.name">
+                    <span class="text-lg" x-text="b.icon"></span>
+                </template>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <button class="flex-1 py-3 rounded-xl bg-forest-400 text-[#0a0c0a] font-semibold text-sm">Download</button>
+            <button class="flex-1 py-3 rounded-xl bg-sage-700/50 border border-white/10 text-sm font-medium">Copy Link</button>
+            <button @click="showShare = false" class="px-4 py-3 rounded-xl bg-sage-700/50 border border-white/10 text-sm">✕</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function app(){
+    return {
+        showShare: false,
+        co2:0, trees:0, eco:0, plastic:0,
+        badges:[
+            {icon:'🌱',name:'First Eco Buy',earned:true},{icon:'🌳',name:'10 Trees',earned:true},
+            {icon:'♻️',name:'First Trade-In',earned:true},{icon:'🔥',name:'4-Week Streak',earned:true},
+            {icon:'💚',name:'50% Eco Cart',earned:true},{icon:'🏔️',name:'500 kg CO₂',earned:true},
+            {icon:'⚡',name:'Carbon Positive',earned:true},{icon:'🎯',name:'Challenge Win',earned:true},
+            {icon:'🌍',name:'1,000 kg CO₂',earned:false},{icon:'🦅',name:'Level 10',earned:false},
+            {icon:'🌿',name:'Full Green Cart',earned:false},{icon:'👑',name:'Trail Guardian',earned:false},
+            {icon:'💎',name:'Platinum Eco',earned:false},{icon:'🏆',name:'Leaderboard #1',earned:false},
+            {icon:'🎪',name:'Event Attendee',earned:false},{icon:'📣',name:'5 Shares',earned:false},
+        ],
+        leaderboard:[
+            {name:'Sami R.',initials:'SR',co2:1240,level:10,you:false},
+            {name:'Priya K.',initials:'PK',co2:980,level:9,you:false},
+            {name:'Jordan T.',initials:'JT',co2:724,level:7,you:true},
+            {name:'Alex M.',initials:'AM',co2:612,level:6,you:false},
+            {name:'Casey L.',initials:'CL',co2:445,level:5,you:false},
+        ],
+        init(){
+            const dur=1200, steps=30, iv=dur/steps;
+            let s=0;
+            const t=setInterval(()=>{s++;const p=1-Math.pow(1-s/steps,4);
+                this.co2=Math.round(724*p);this.trees=Math.round(18*p);
+                this.eco=Math.round(23*p);this.plastic=Math.round(12*p);
+                if(s>=steps)clearInterval(t);},iv);
+        }
+    }
+}
+</script>
+</body>
+</html>
