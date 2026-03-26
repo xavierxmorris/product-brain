@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Impact | Contoso Outdoor Gear</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: { extend: {
+                fontFamily: { display: ['Outfit','sans-serif'], serif: ['Source Serif 4','Georgia','serif'] },
+                colors: {
+                    sage: { 50:'#f6f7f6',100:'#e3e5e3',200:'#c7ccc7',300:'#a3aba3',400:'#7c877c',500:'#7a9b7e',600:'#5a7b5e',700:'#404640',800:'#363b36',900:'#2f322f' },
+                    forest: { 400:'#4ade80',500:'#22c55e',600:'#16a34a' },
+                    ember: { 400:'#fb923c',500:'#f97316',600:'#ea580c' },
+                }
+            }}
+        }
+    </script>
+    <style>
+        :root { --bg:#0a0c0a; --card:rgba(17,20,17,0.85); --border:rgba(163,171,163,0.15); --txt:#e8ebe8; --muted:#a3aba3; }
+        body { font-family:'Outfit',sans-serif; background:var(--bg); color:var(--txt); min-height:100vh; }
+        .ambient { position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(74,222,128,0.06) 0%,transparent 50%),var(--bg); }
+        h1,h2,h3 { font-family:'Source Serif 4',Georgia,serif; letter-spacing:-0.02em; }
+        .card { background:var(--card);border-radius:16px;border:1px solid var(--border);backdrop-filter:blur(20px); }
+        .card:hover { border-color:rgba(74,222,128,0.3);box-shadow:0 0 30px rgba(74,222,128,0.05); }
+        @keyframes fillBar { from { width:0 } }
+        .animate-fill { animation:fillBar 1.2s ease-out both; }
+        .ring-anim { transition:stroke-dashoffset 1.5s ease-out; }
+    </style>
+</head>
+<body x-data="app()" x-init="init()">
+<div class="ambient"></div>
+
+<!-- Nav -->
+<nav class="sticky top-0 z-50 backdrop-blur-xl border-b border-white/5">
+    <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-forest-400/20 flex items-center justify-center">
+                <svg class="w-5 h-5 text-forest-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <span class="font-display font-semibold text-sm tracking-wide">CONTOSO OUTDOOR</span>
+        </div>
+        <div class="flex items-center gap-6 text-sm text-sage-300">
+            <a href="#" class="text-forest-400 font-medium">My Impact</a>
+            <div class="w-8 h-8 rounded-full bg-sage-700 flex items-center justify-center text-xs font-medium">JT</div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<header class="max-w-5xl mx-auto px-6 pt-10 pb-4">
+    <p class="text-forest-400 text-xs font-medium tracking-widest uppercase mb-1">Gold Member · Joined 2023</p>
+    <h1 class="text-3xl font-bold">Your Impact in Numbers</h1>
+    <p class="text-sage-300 text-sm mt-1 max-w-lg">Clean, verified data. No greenwashing — just what your purchases have actually offset.</p>
+</header>
+
+<!-- ═══ KPI ROW ═══ -->
+<section class="max-w-5xl mx-auto px-6 pb-6">
+    <div class="grid grid-cols-4 gap-3">
+        <template x-for="kpi in kpis" :key="kpi.label">
+            <div class="card p-5">
+                <p class="text-sage-300 text-xs mb-1" x-text="kpi.label"></p>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-3xl font-bold text-forest-400 tabular-nums" x-text="kpi.value"></span>
+                    <span class="text-sage-400 text-xs" x-text="kpi.unit"></span>
+                </div>
+                <div class="mt-2 h-1 rounded-full bg-sage-800">
+                    <div class="h-full rounded-full bg-forest-400/70 animate-fill" :style="'width:'+kpi.pct+'%'"></div>
+                </div>
+                <p class="text-sage-400 text-[10px] mt-1" x-text="kpi.context"></p>
+            </div>
+        </template>
+    </div>
+</section>
+
+<!-- ═══ MONTHLY TREND ═══ -->
+<section class="max-w-5xl mx-auto px-6 pb-6">
+    <div class="card p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg">Monthly CO₂ Offset Trend</h2>
+            <span class="text-sage-400 text-xs">Last 12 months</span>
+        </div>
+        <!-- Bar chart -->
+        <div class="flex items-end gap-1.5 h-40">
+            <template x-for="(bar, i) in monthlyData" :key="i">
+                <div class="flex-1 flex flex-col items-center gap-1">
+                    <span class="text-[9px] text-sage-400 tabular-nums" x-text="bar.value + ' kg'"></span>
+                    <div class="w-full rounded-t-md transition-all duration-700"
+                         :style="'height:' + (bar.value / maxMonth * 100) + '%'"
+                         :class="i === monthlyData.length-1 ? 'bg-forest-400' : 'bg-forest-400/30'"></div>
+                    <span class="text-[9px] text-sage-400" x-text="bar.month"></span>
+                </div>
+            </template>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ ECO-CERTIFIED BREAKDOWN ═══ -->
+<section class="max-w-5xl mx-auto px-6 pb-6 grid lg:grid-cols-2 gap-3">
+    <!-- Donut -->
+    <div class="card p-6">
+        <h2 class="text-lg mb-4">Purchase Certification Mix</h2>
+        <div class="flex items-center gap-8">
+            <svg viewBox="0 0 36 36" class="w-32 h-32">
+                <circle cx="18" cy="18" r="14" fill="none" stroke="#2f322f" stroke-width="4"/>
+                <circle cx="18" cy="18" r="14" fill="none" stroke="#4ade80" stroke-width="4"
+                        stroke-dasharray="42 88" stroke-dashoffset="25" stroke-linecap="round"
+                        class="ring-anim" transform="rotate(-90 18 18)"/>
+                <circle cx="18" cy="18" r="14" fill="none" stroke="#22c55e" stroke-width="4"
+                        stroke-dasharray="18 88" stroke-dashoffset="-17" stroke-linecap="round"
+                        class="ring-anim" transform="rotate(-90 18 18)"/>
+                <circle cx="18" cy="18" r="14" fill="none" stroke="#7a9b7e" stroke-width="4"
+                        stroke-dasharray="8 88" stroke-dashoffset="-35" stroke-linecap="round"
+                        class="ring-anim" transform="rotate(-90 18 18)"/>
+                <text x="18" y="17" text-anchor="middle" fill="#e8ebe8" font-size="6" font-weight="700" font-family="Outfit">67%</text>
+                <text x="18" y="22" text-anchor="middle" fill="#a3aba3" font-size="3" font-family="Outfit">eco-certified</text>
+            </svg>
+            <div class="space-y-2 text-sm">
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-forest-400"></span> B Corp Certified — 48%</div>
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-forest-500"></span> Recycled Materials — 20%</div>
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-sage-500"></span> Fair Trade — 9%</div>
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-sm bg-sage-800"></span> Standard — 33%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top categories -->
+    <div class="card p-6">
+        <h2 class="text-lg mb-4">Impact by Category</h2>
+        <div class="space-y-3">
+            <template x-for="cat in categories" :key="cat.name">
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span x-text="cat.name"></span>
+                        <span class="text-sage-400 tabular-nums" x-text="cat.co2 + ' kg CO₂'"></span>
+                    </div>
+                    <div class="h-2 rounded-full bg-sage-800">
+                        <div class="h-full rounded-full animate-fill" :class="cat.color" :style="'width:'+cat.pct+'%'"></div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ CARBON CALCULATOR ═══ -->
+<section class="max-w-5xl mx-auto px-6 pb-6">
+    <div class="card p-6">
+        <h2 class="text-lg mb-1">Carbon Offset Calculator</h2>
+        <p class="text-sage-300 text-xs mb-4">Real-time estimate for your current cart</p>
+        <div class="grid md:grid-cols-3 gap-3 text-center">
+            <div class="p-4 rounded-xl bg-sage-900/60 border border-white/5">
+                <p class="text-sage-400 text-xs mb-1">Manufacturing</p>
+                <p class="text-2xl font-bold text-forest-400">22.7 <span class="text-xs font-normal text-sage-400">kg</span></p>
+            </div>
+            <div class="p-4 rounded-xl bg-sage-900/60 border border-white/5">
+                <p class="text-sage-400 text-xs mb-1">Shipping</p>
+                <p class="text-2xl font-bold text-forest-400">3.4 <span class="text-xs font-normal text-sage-400">kg</span></p>
+            </div>
+            <div class="p-4 rounded-xl bg-forest-400/10 border border-forest-400/20">
+                <p class="text-forest-400 text-xs mb-1 font-medium">Total Offset (included)</p>
+                <p class="text-2xl font-bold text-forest-400">26.1 <span class="text-xs font-normal">kg CO₂</span></p>
+            </div>
+        </div>
+        <div class="mt-4 p-3 rounded-xl bg-ember-500/10 border border-ember-500/15 flex items-center gap-3">
+            <span class="text-ember-400 text-sm font-medium flex-1">Go carbon-positive: triple offset to 78.3 kg for +$2.00</span>
+            <button class="px-4 py-2 rounded-lg bg-ember-500 text-white text-xs font-semibold hover:bg-ember-600 transition">Upgrade</button>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ VERIFICATION FOOTER ═══ -->
+<footer class="max-w-5xl mx-auto px-6 pb-12">
+    <div class="card p-4 flex items-center gap-4 text-xs text-sage-400">
+        <svg class="w-4 h-4 text-forest-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+        <span>All offset data verified by Climate Neutral Certified™. Manufacturing estimates use Higg MSI industry averages. <a href="#" class="text-forest-400 underline">See methodology →</a></span>
+    </div>
+</footer>
+
+<script>
+function app() {
+    return {
+        kpis: [
+            { label:'Lifetime CO₂ Offset', value:0, target:724, unit:'kg', pct:72, context:'72% to 1,000 kg milestone' },
+            { label:'Trees Planted', value:0, target:18, unit:'trees', pct:60, context:'Via Eden Reforestation Partners' },
+            { label:'Eco-Certified Items', value:0, target:23, unit:'of 34', pct:67, context:'67% of your purchases' },
+            { label:'Plastic Avoided', value:0, target:12, unit:'kg', pct:48, context:'Recycled packaging choices' },
+        ],
+        monthlyData: [
+            {month:'Apr',value:42},{month:'May',value:58},{month:'Jun',value:35},
+            {month:'Jul',value:71},{month:'Aug',value:64},{month:'Sep',value:52},
+            {month:'Oct',value:86},{month:'Nov',value:93},{month:'Dec',value:110},
+            {month:'Jan',value:68},{month:'Feb',value:45},{month:'Mar',value:0},
+        ],
+        maxMonth: 110,
+        categories: [
+            { name:'Apparel', co2:312, pct:100, color:'bg-forest-400' },
+            { name:'Footwear', co2:198, pct:63, color:'bg-forest-400/70' },
+            { name:'Camping', co2:124, pct:40, color:'bg-forest-500/60' },
+            { name:'Hiking Gear', co2:90, pct:29, color:'bg-sage-500' },
+        ],
+        init() {
+            const duration = 1200, steps = 30, interval = duration / steps;
+            let step = 0;
+            const timer = setInterval(() => {
+                step++;
+                const t = 1 - Math.pow(1 - step/steps, 4);
+                this.kpis.forEach(k => k.value = Math.round(k.target * t));
+                this.monthlyData[11].value = Math.round(78 * t);
+                if (step >= steps) clearInterval(timer);
+            }, interval);
+        }
+    }
+}
+</script>
+</body>
+</html>
