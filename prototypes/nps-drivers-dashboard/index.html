@@ -310,7 +310,7 @@
           <div>
             <div class="text-sage-500 text-xs uppercase tracking-[0.2em] mb-2">Channel performance</div>
             <h2 class="text-3xl font-semibold mb-2">Mobile web is the outlier channel</h2>
-            <p class="text-sage-400 max-w-3xl">Toggle between NPS and satisfaction measures. App, desktop, and in-store cluster together; mobile web does not.</p>
+            <p class="text-sage-400 max-w-3xl">Toggle between NPS and satisfaction measures. App, desktop, and in-store cluster together; mobile web does not. Overall satisfaction is derived as the mean of checkout, search, and returns satisfaction.</p>
           </div>
           <div class="flex flex-wrap gap-2">
             <template x-for="metric in metricOptions" :key="metric.key">
@@ -358,7 +358,7 @@
                 <div>
                   <div class="flex items-center justify-between text-sm mb-2">
                     <span class="text-sage-400">Mobile web</span>
-                    <span class="text-sage-500">0.00% promoters • 89.52% detractors</span>
+                    <span class="text-sage-500">n=105 • 0.00% promoters • 10.48% passives • 89.52% detractors</span>
                   </div>
                   <div class="stack-track">
                     <div class="bg-crimson-500" style="width: 89.52%"></div>
@@ -369,7 +369,7 @@
                 <div>
                   <div class="flex items-center justify-between text-sm mb-2">
                     <span class="text-sage-400">All other channels</span>
-                    <span class="text-sage-500">57.09% promoters • 0.00% detractors</span>
+                    <span class="text-sage-500">n=247 • 57.09% promoters • 42.91% passives • 0.00% detractors</span>
                   </div>
                   <div class="stack-track">
                     <div class="bg-crimson-500" style="width: 0%"></div>
@@ -561,7 +561,7 @@
           labels: ['Mobile web', 'App', 'Desktop', 'In-store'],
           nps: [5.4, 8.389, 8.474, 9.414],
           checkout: [2.324, 4.0, 4.385, 5.0],
-          overall: [2.965, null, null, null]
+          overall: [2.965, 4.29, 4.356, 4.787]
         },
         init() {
           Chart.defaults.color = '#a3aba3';
