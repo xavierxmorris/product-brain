@@ -358,7 +358,7 @@
                 <div>
                   <div class="flex items-center justify-between text-sm mb-2">
                     <span class="text-sage-400">Mobile web</span>
-                    <span class="text-sage-500">n=105 • 0.00% promoters • 10.48% passives • 89.52% detractors</span>
+                    <span class="text-sage-500">n=105 • 0.00% promoters (none observed) • 10.48% passives • 89.52% detractors</span>
                   </div>
                   <div class="stack-track">
                     <div class="bg-crimson-500" style="width: 89.52%"></div>
@@ -369,7 +369,7 @@
                 <div>
                   <div class="flex items-center justify-between text-sm mb-2">
                     <span class="text-sage-400">All other channels</span>
-                    <span class="text-sage-500">n=247 • 57.09% promoters • 42.91% passives • 0.00% detractors</span>
+                    <span class="text-sage-500">n=247 • 57.09% promoters • 42.91% passives • 0.00% detractors (none observed)</span>
                   </div>
                   <div class="stack-track">
                     <div class="bg-crimson-500" style="width: 0%"></div>
@@ -656,6 +656,7 @@
         updateChannelChart() {
           const chart = this.channelChart;
           const metric = this.channelMetric;
+          const clusteredChannelColor = '#475569';
           const labels = {
             nps: 'NPS',
             checkout: 'Checkout satisfaction',
@@ -664,7 +665,7 @@
           const colors = {
             nps: ['#ef4444', '#38bdf8', '#a3aba3', '#4ade80'],
             checkout: ['#ef4444', '#38bdf8', '#c7ccc7', '#4ade80'],
-            overall: ['#f97316', '#475569', '#475569', '#475569']
+            overall: ['#f97316', clusteredChannelColor, clusteredChannelColor, clusteredChannelColor]
           };
 
           chart.data.datasets[0].label = labels[metric];
