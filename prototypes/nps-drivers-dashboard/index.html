@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NPS Drivers Dashboard | Contoso Outdoor Gear</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Outfit', 'sans-serif'],
+            serif: ['Source Serif 4', 'Georgia', 'serif'],
+          },
+          colors: {
+            sage: {
+              50: '#f6f7f6',
+              100: '#e3e5e3',
+              200: '#c7ccc7',
+              300: '#a3aba3',
+              400: '#7c877c',
+              500: '#7a9b7e',
+              600: '#5a7b5e',
+              700: '#404640',
+              800: '#363b36',
+              900: '#2f322f',
+            },
+            forest: {
+              400: '#4ade80',
+              500: '#22c55e',
+              600: '#16a34a',
+            },
+            ember: {
+              400: '#fb923c',
+              500: '#f97316',
+              600: '#ea580c',
+            },
+            crimson: {
+              400: '#f87171',
+              500: '#ef4444',
+              600: '#dc2626',
+            },
+            sky: {
+              400: '#38bdf8',
+              500: '#0ea5e9',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg-primary: #0a0c0a;
+      --bg-secondary: #111411;
+      --bg-card: rgba(17, 20, 17, 0.82);
+      --border-subtle: rgba(163, 171, 163, 0.14);
+      --text-primary: #e8ebe8;
+      --text-secondary: #a3aba3;
+      --accent-forest: #4ade80;
+      --accent-ember: #f97316;
+      --accent-sky: #38bdf8;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(ellipse 75% 50% at 50% -20%, rgba(74, 222, 128, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse 55% 40% at 100% 35%, rgba(56, 189, 248, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse 55% 45% at 0% 100%, rgba(249, 115, 22, 0.05) 0%, transparent 50%),
+        var(--bg-primary);
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    h1, h2, h3 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      letter-spacing: -0.02em;
+    }
+
+    .glass-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+    }
+
+    .metric-card,
+    .action-card,
+    .callout-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card::before,
+    .action-card::before,
+    .callout-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-forest), transparent);
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #4ade80 0%, #c7ccc7 45%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid rgba(163, 171, 163, 0.2);
+    }
+
+    .badge-prototype {
+      color: #fb923c;
+      background: rgba(249, 115, 22, 0.12);
+      border-color: rgba(249, 115, 22, 0.25);
+    }
+
+    .badge-forest {
+      color: #4ade80;
+      background: rgba(74, 222, 128, 0.12);
+      border-color: rgba(74, 222, 128, 0.25);
+    }
+
+    .toggle-pill {
+      transition: all 0.2s ease;
+    }
+
+    .toggle-pill.active {
+      background: linear-gradient(135deg, rgba(74, 222, 128, 0.2), rgba(56, 189, 248, 0.18));
+      color: white;
+      border-color: rgba(74, 222, 128, 0.3);
+    }
+
+    .stack-track {
+      display: flex;
+      width: 100%;
+      height: 16px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(163, 171, 163, 0.12);
+    }
+
+    .chart-wrap {
+      position: relative;
+      height: 320px;
+    }
+
+    @media (max-width: 768px) {
+      .chart-wrap {
+        height: 280px;
+      }
+    }
+  </style>
+</head>
+<body x-data="dashboardApp()" x-init="init()">
+  <main class="px-6 py-8 lg:px-10">
+    <div class="max-w-7xl mx-auto">
+      <div class="glass-card border border-ember-500/30 bg-ember-500/8 px-4 py-3 mb-6 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <span class="badge badge-prototype">⚠️ Prototype</span>
+          <span class="text-sm text-sage-200">Stakeholder draft based on the updated Q4 2025 NPS notebook. Not production reporting.</span>
+        </div>
+        <a href="../../analysis/notebooks/customer-nps-analysis-q4-2025.ipynb" class="text-sm text-ember-300 hover:text-ember-200 transition-colors">
+          View source notebook →
+        </a>
+      </div>
+
+      <section class="grid xl:grid-cols-[1.3fr,0.7fr] gap-6 items-stretch mb-8">
+        <div class="glass-card p-8 lg:p-10">
+          <div class="flex flex-wrap items-center gap-3 mb-5">
+            <span class="badge badge-forest">📊 NPS drivers dashboard</span>
+            <span class="text-xs uppercase tracking-[0.2em] text-sage-500">Contoso outdoor gear</span>
+          </div>
+          <h1 class="text-4xl lg:text-6xl font-bold leading-tight mb-5">
+            <span class="gradient-text">Mobile web checkout</span> is the clearest drag on NPS
+          </h1>
+          <p class="text-lg text-sage-300 max-w-3xl mb-8">
+            Overall satisfaction and checkout are the strongest quantitative predictors of NPS, and mobile web underperforms every other channel with highly significant gaps.
+          </p>
+          <div class="grid sm:grid-cols-3 gap-4">
+            <div class="glass-card metric-card p-5">
+              <div class="text-sage-500 text-xs uppercase tracking-[0.2em] mb-2">Overall sample</div>
+              <div class="text-3xl font-bold text-sage-50">n=352</div>
+              <div class="text-sm text-sage-400 mt-2">Updated notebook</div>
+            </div>
+            <div class="glass-card metric-card p-5">
+              <div class="text-sage-500 text-xs uppercase tracking-[0.2em] mb-2">Net promoter score</div>
+              <div class="text-3xl font-bold text-forest-400">13.35</div>
+              <div class="text-sm text-sage-400 mt-2">Mean NPS score: 7.70</div>
+            </div>
+            <div class="glass-card metric-card p-5">
+              <div class="text-sage-500 text-xs uppercase tracking-[0.2em] mb-2">Composition</div>
+              <div class="text-3xl font-bold text-sage-50">40.06% / 26.70%</div>
+              <div class="text-sm text-sage-400 mt-2">Promoters / detractors</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card p-8 flex flex-col justify-between">
+          <div>
+            <div class="text-sage-500 text-xs uppercase tracking-[0.2em] mb-3">Executive takeaway</div>
+            <h2 class="text-2xl font-semibold text-sage-100 mb-4">Separate mobile web from app in every stakeholder readout</h2>
+            <p class="text-sage-300 mb-5">
+              App performs near desktop and in-store. Mobile web is the outlier, especially among newer customers.
+            </p>
+          </div>
+          <div class="space-y-4">
+            <div class="rounded-2xl border border-crimson-500/20 bg-crimson-500/10 p-4">
+              <div class="text-sm text-sage-400 mb-1">Mobile web vs all other channels</div>
+              <div class="text-3xl font-bold text-crimson-400">-3.276 NPS</div>
+              <div class="text-sm text-sage-500 mt-2">Checkout gap -2.122 • overall satisfaction gap -1.478</div>
+            </div>
+            <div class="rounded-2xl border border-sky-500/20 bg-sky-500/10 p-4">
+              <div class="text-sm text-sage-400 mb-1">Established cohort still shows a gap</div>
+              <div class="text-3xl font-bold text-sky-400">6.250 vs 7.729</div>
+              <div class="text-sm text-sage-500 mt-2">Mobile web vs others on NPS • checkout 3.000 vs 4.062</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid xl:grid-cols-[0.9fr,1.1fr] gap-6 mb-8">
+        <div class="glass-card p-7">
+          <div class="flex items-center justify-between gap-4 mb-5">
+            <div>
+              <div class="text-sage-500 text-xs uppercase tracking-[0.2em] mb-2">Driver strength</div>
+              <h2 class="text-3xl font-semibold">What moves NPS most</h2>
+            </div>
+            <span class="text-sm text-sage-500">Pearson r</span>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="correlationChart"></canvas>
+          </div>
+        </div>
+
+        <div class="glass-card p-7">
+          <div class="text-sage-500 text-xs uppercase tracking-[0.2em] mb-2">Interpretation</div>
+          <h2 class="text-3xl font-semibold mb-6">Satisfaction metrics explain most of the score movement</h2>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div class="callout-card glass-card p-5">
+              <div class="text-sage-500 text-xs uppercase tracking-[0.18em] mb-2">#1 driver</div>
+              <div class="text-3xl font-bold text-forest-400 mb-2">0.9642</div>
+              <div class="text-sage-200 font-medium">Overall satisfaction</div>
+            </div>
+            <div class="callout-card glass-card p-5">
+              <div class="text-sage-500 text-xs uppercase tracking-[0.18em] mb-2">Strongest touchpoint</div>
+              <div class="text-3xl font-bold text-sky-400 mb-2">0.9234</div>
+              <div class="text-sage-200 font-medium">Checkout satisfaction</div>
+            </div>
+            <div class="callout-card glass-card p-5">
+              <div class="text-sage-500 text-xs uppercase tracking-[0.18em] mb-2">Secondary drivers</div>
+              <div class="text-sage-200 font-medium mb-2">Returns 0.8925</div>
+              <div class="text-sage-500 text-sm">Search still matters at 0.8465, but trails checkout and returns.</div>
+            </div>
+            <div class="callout-card glass-card p-5">
+              <div class="text-sage-500 text-xs uppercase tracking-[0.18em] mb-2">Product implication</div>
+              <div class="text-sage-300 text-sm">
+                If one team needs a lead metric, checkout satisfaction is the most actionable proxy for NPS improvement.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="glass-card p-7 mb-8">
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5 mb-6">
+          <div>
+            <div class="text-sage-500 text-xs uppercase tracking-[0.2em] mb-2">Channel performance</div>
+            <h2 class="text-3xl font-semibold mb-2">Mobile web is the outlier channel</h2>
+            <p class="text-sage-400 max-w-3xl">Toggle between NPS and satisfaction measures. App, desktop, and in-store cluster together; mobile web does not.</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <template x-for="metric in metricOptions" :key="metric.key">
+              <button
+                @click="setChannelMetric(metric.key)"
+                class="toggle-pill rounded-full border border-sage-700/60 px-4 py-2 text-sm text-sage-300"
+                :class="{ 'active': channelMetric === metric.key }"
+                x-text="metric.label">
+              </button>
+            </template>
+          </div>
+        </div>
+
+        <div class="grid xl:grid-cols-[1.25fr,0.75fr] gap-6">
+          <div class="chart-wrap">
+            <canvas id="channelChart"></canvas>
+          </div>
+
+          <div class="space-y-4">
+            <div class="callout-card glass-card p-5">
+              <div class="text-sage-500 text-xs uppercase tracking-[0.18em] mb-2">Channel snapshot</div>
+              <div class="space-y-3 text-sm">
+                <div class="flex items-center justify-between gap-4">
+                  <span class="text-sage-400">Mobile web</span>
+                  <span class="font-semibold text-crimson-400">NPS 5.400 • Checkout 2.324</span>
+                </div>
+                <div class="flex items-center justify-between gap-4">
+                  <span class="text-sage-400">App</span>
+                  <span class="font-semibold text-sky-400">NPS 8.389 • Checkout 4.000</span>
+                </div>
+                <div class="flex items-center justify-between gap-4">
+                  <span class="text-sage-400">Desktop</span>
+                  <span class="font-semibold text-sage-100">NPS 8.474 • Checkout 4.385</span>
+                </div>
+                <div class="flex items-center justify-between gap-4">
+                  <span class="text-sage-400">In-store</span>
+                  <span class="font-semibold text-forest-400">NPS 9.414 • Checkout 5.000</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="callout-card glass-card p-5">
+              <div class="text-sage-500 text-xs uppercase tracking-[0.18em] mb-2">Promoter / detractor split</div>
+              <div class="space-y-4">
+                <div>
+                  <div class="flex items-center justify-between text-sm mb-2">
+                    <span class="text-sage-400">Mobile web</span>
+                    <span class="text-sage-500">0.00% promoters • 89.52% detractors</span>
+                  </div>
+                  <div class="stack-track">
+                    <div class="bg-crimson-500" style="width: 89.52%"></div>
+                    <div class="bg-sage-600" style="width: 10.48%"></div>
+                    <div class="bg-forest-500" style="width: 0%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex items-center justify-between text-sm mb-2">
+                    <span class="text-sage-400">All other channels</span>
+                    <span class="text-sage-500">57.09% promoters • 0.00% detractors</span>
+                  </div>
+                  <div class="stack-track">
+                    <div class="bg-crimson-500" style="width: 0%"></div>
+                    <div class="bg-sage-600" style="width: 42.91%"></div>
+                    <div class="bg-forest-500" style="width: 57.09%"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-4 text-xs text-sage-500 mt-3">
+                <span class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-crimson-500"></span>Detractors</span>
+                <span class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-sage-600"></span>Passives</span>
+                <span class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-forest-500"></span>Promoters</span>
+              </div>
+            </div>
+
+            <div class="rounded-2xl border border-forest-500/20 bg-forest-500/8 p-5">
+              <div class="text-sm text-sage-300">
+                Mobile web also trails on <strong class="text-sage-100">overall satisfaction</strong> at <strong class="text-forest-300">2.965</strong>, and the gap vs all other channels remains highly significant.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid xl:grid-cols-2 gap-6 mb-8">
+        <div class="glass-card p-7">
+          <div class="text-sage-500 text-xs uppercase tracking-[0.2em] mb-2">Lifecycle patterns</div>
+          <h2 class="text-3xl font-semibold mb-5">NPS rises with tenure</h2>
+          <div class="chart-wrap">
+            <canvas id="tenureChart"></canvas>
+          </div>
+          <div class="grid sm:grid-cols-4 gap-3 mt-5 text-sm">
+            <div class="rounded-2xl bg-sage-900/70 border border-sage-800 p-3">
+              <div class="text-sage-500">New</div>
+              <div class="font-semibold text-crimson-400">4.486</div>
+            </div>
+            <div class="rounded-2xl bg-sage-900/70 border border-sage-800 p-3">
+              <div class="text-sage-500">Growing</div>
+              <div class="font-semibold text-ember-400">5.844</div>
+            </div>
+            <div class="rounded-2xl bg-sage-900/70 border border-sage-800 p-3">
+              <div class="text-sage-500">Established</div>
+              <div class="font-semibold text-sky-400">7.615</div>
+            </div>
+            <div class="rounded-2xl bg-sage-900/70 border border-sage-800 p-3">
+              <div class="text-sage-500">Loyal</div>
+              <div class="font-semibold text-forest-400">9.309</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card p-7">
+          <div class="text-sage-500 text-xs uppercase tracking-[0.2em] mb-2">Loyalty signal</div>
+          <h2 class="text-3xl font-semibold mb-5">Membership tier tracks the same upward curve</h2>
+          <div class="chart-wrap">
+            <canvas id="tierChart"></canvas>
+          </div>
+          <div class="grid sm:grid-cols-5 gap-3 mt-5 text-sm">
+            <div class="rounded-2xl bg-sage-900/70 border border-sage-800 p-3">
+              <div class="text-sage-500">None</div>
+              <div class="font-semibold text-crimson-400">4.696</div>
+            </div>
+            <div class="rounded-2xl bg-sage-900/70 border border-sage-800 p-3">
+              <div class="text-sage-500">Bronze</div>
+              <div class="font-semibold text-ember-400">6.233</div>
+            </div>
+            <div class="rounded-2xl bg-sage-900/70 border border-sage-800 p-3">
+              <div class="text-sage-500">Silver</div>
+              <div class="font-semibold text-sky-400">7.452</div>
+            </div>
+            <div class="rounded-2xl bg-sage-900/70 border border-sage-800 p-3">
+              <div class="text-sage-500">Gold</div>
+              <div class="font-semibold text-sage-100">8.571</div>
+            </div>
+            <div class="rounded-2xl bg-sage-900/70 border border-sage-800 p-3">
+              <div class="text-sage-500">Platinum</div>
+              <div class="font-semibold text-forest-400">9.607</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid xl:grid-cols-[0.95fr,1.05fr] gap-6 mb-8">
+        <div class="glass-card p-7">
+          <div class="text-sage-500 text-xs uppercase tracking-[0.2em] mb-2">Mix effect</div>
+          <h2 class="text-3xl font-semibold mb-5">Channel and tenure are tightly linked</h2>
+          <div class="space-y-4">
+            <div class="callout-card glass-card p-5">
+              <div class="text-sage-500 text-xs uppercase tracking-[0.18em] mb-2">Mobile-web mix</div>
+              <div class="text-4xl font-bold text-crimson-400 mb-2">92.38%</div>
+              <div class="text-sage-300">of mobile-web respondents are <strong class="text-sage-100">New or Growing</strong>.</div>
+            </div>
+            <div class="callout-card glass-card p-5">
+              <div class="text-sage-500 text-xs uppercase tracking-[0.18em] mb-2">All other channels mix</div>
+              <div class="text-4xl font-bold text-forest-400 mb-2">60.32%</div>
+              <div class="text-sage-300">of non-mobile-web respondents are <strong class="text-sage-100">Loyal</strong>.</div>
+            </div>
+            <div class="rounded-2xl border border-sky-500/20 bg-sky-500/10 p-5">
+              <div class="text-sage-300">Channel × tenure association is extremely strong: <strong class="text-sky-300">chi-square p = 1.38e-69</strong>.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card p-7">
+          <div class="text-sage-500 text-xs uppercase tracking-[0.2em] mb-2">Residual channel effect</div>
+          <h2 class="text-3xl font-semibold mb-5">Even after mix, mobile web still underperforms</h2>
+          <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <div class="action-card glass-card p-5">
+              <div class="text-sage-500 text-xs uppercase tracking-[0.18em] mb-2">Established cohort NPS</div>
+              <div class="text-3xl font-bold text-crimson-400 mb-2">6.250</div>
+              <div class="text-sage-500 text-sm">Mobile web</div>
+            </div>
+            <div class="action-card glass-card p-5">
+              <div class="text-sage-500 text-xs uppercase tracking-[0.18em] mb-2">Established cohort NPS</div>
+              <div class="text-3xl font-bold text-forest-400 mb-2">7.729</div>
+              <div class="text-sage-500 text-sm">Other channels</div>
+            </div>
+            <div class="action-card glass-card p-5">
+              <div class="text-sage-500 text-xs uppercase tracking-[0.18em] mb-2">Established checkout</div>
+              <div class="text-3xl font-bold text-crimson-400 mb-2">3.000</div>
+              <div class="text-sage-500 text-sm">Mobile web</div>
+            </div>
+            <div class="action-card glass-card p-5">
+              <div class="text-sage-500 text-xs uppercase tracking-[0.18em] mb-2">Established checkout</div>
+              <div class="text-3xl font-bold text-forest-400 mb-2">4.062</div>
+              <div class="text-sage-500 text-sm">Other channels</div>
+            </div>
+          </div>
+          <div class="rounded-2xl border border-ember-500/20 bg-ember-500/10 p-5 text-sage-300">
+            Translation: tenure explains <em>part</em> of the mobile gap, but not all of it. The mobile-web experience itself still needs fixing.
+          </div>
+        </div>
+      </section>
+
+      <section class="glass-card p-7 mb-8">
+        <div class="text-sage-500 text-xs uppercase tracking-[0.2em] mb-2">Recommended focus</div>
+        <h2 class="text-3xl font-semibold mb-6">What stakeholders should do next</h2>
+        <div class="grid lg:grid-cols-3 gap-4">
+          <div class="action-card glass-card p-5">
+            <div class="text-sage-500 text-xs uppercase tracking-[0.18em] mb-2">P0</div>
+            <div class="text-xl font-semibold text-sage-100 mb-3">Treat mobile web checkout as the first fix</div>
+            <p class="text-sage-400 text-sm">Use checkout satisfaction as the primary leading indicator because it is the strongest actionable touchpoint driver.</p>
+          </div>
+          <div class="action-card glass-card p-5">
+            <div class="text-sage-500 text-xs uppercase tracking-[0.18em] mb-2">P1</div>
+            <div class="text-xl font-semibold text-sage-100 mb-3">Report mobile web separately from app</div>
+            <p class="text-sage-400 text-sm">A blended “mobile” metric hides that app performs near desktop while mobile web is driving detractors.</p>
+          </div>
+          <div class="action-card glass-card p-5">
+            <div class="text-sage-500 text-xs uppercase tracking-[0.18em] mb-2">P2</div>
+            <div class="text-xl font-semibold text-sage-100 mb-3">Prioritize early-life cohorts</div>
+            <p class="text-sage-400 text-sm">Most mobile-web respondents are New or Growing, so improvements here should help acquisition and long-term loyalty.</p>
+          </div>
+        </div>
+      </section>
+
+      <footer class="pb-6">
+        <div class="glass-card p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <div class="text-sm text-sage-300">Sources</div>
+            <div class="text-sm text-sage-500">
+              analysis/notebooks/customer-nps-analysis-q4-2025.ipynb · insights/nps-drivers-q4.md
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-4 text-sm">
+            <a href="../" class="text-sage-400 hover:text-sage-200 transition-colors">All prototypes</a>
+            <a href="../../analysis/notebooks/customer-nps-analysis-q4-2025.ipynb" class="text-sage-400 hover:text-sage-200 transition-colors">Notebook</a>
+            <a href="../../insights/nps-drivers-q4.md" class="text-sage-400 hover:text-sage-200 transition-colors">Insight doc</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </main>
+
+  <script>
+    function dashboardApp() {
+      return {
+        channelMetric: 'nps',
+        channelChart: null,
+        correlationChart: null,
+        tenureChart: null,
+        tierChart: null,
+        metricOptions: [
+          { key: 'nps', label: 'NPS' },
+          { key: 'checkout', label: 'Checkout satisfaction' },
+          { key: 'overall', label: 'Overall satisfaction' }
+        ],
+        channelData: {
+          labels: ['Mobile web', 'App', 'Desktop', 'In-store'],
+          nps: [5.4, 8.389, 8.474, 9.414],
+          checkout: [2.324, 4.0, 4.385, 5.0],
+          overall: [2.965, null, null, null]
+        },
+        init() {
+          Chart.defaults.color = '#a3aba3';
+          Chart.defaults.font.family = 'Outfit, sans-serif';
+          this.renderCorrelationChart();
+          this.renderChannelChart();
+          this.renderTenureChart();
+          this.renderTierChart();
+        },
+        setChannelMetric(metric) {
+          this.channelMetric = metric;
+          this.updateChannelChart();
+        },
+        renderCorrelationChart() {
+          const ctx = document.getElementById('correlationChart');
+          this.correlationChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: ['Overall satisfaction', 'Checkout', 'Returns', 'Search'],
+              datasets: [{
+                data: [0.9642, 0.9234, 0.8925, 0.8465],
+                backgroundColor: ['#4ade80', '#38bdf8', '#a3aba3', '#f97316'],
+                borderRadius: 10,
+                borderSkipped: false
+              }]
+            },
+            options: {
+              indexAxis: 'y',
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: (context) => `r = ${context.raw.toFixed(4)}`
+                  }
+                }
+              },
+              scales: {
+                x: {
+                  min: 0,
+                  max: 1,
+                  grid: { color: 'rgba(163,171,163,0.10)' },
+                  ticks: {
+                    callback: (value) => value.toFixed(1)
+                  }
+                },
+                y: {
+                  grid: { display: false }
+                }
+              }
+            }
+          });
+        },
+        renderChannelChart() {
+          const ctx = document.getElementById('channelChart');
+          this.channelChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: this.channelData.labels,
+              datasets: [{
+                label: 'NPS',
+                data: this.channelData.nps,
+                backgroundColor: ['#ef4444', '#38bdf8', '#a3aba3', '#4ade80'],
+                borderRadius: 12,
+                borderSkipped: false
+              }]
+            },
+            options: {
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: (context) => `${this.metricOptions.find(opt => opt.key === this.channelMetric).label}: ${context.raw?.toFixed?.(3) ?? 'n/a'}`
+                  }
+                }
+              },
+              scales: {
+                x: {
+                  grid: { display: false }
+                },
+                y: {
+                  beginAtZero: true,
+                  suggestedMax: 10,
+                  grid: { color: 'rgba(163,171,163,0.10)' }
+                }
+              }
+            }
+          });
+          this.updateChannelChart();
+        },
+        updateChannelChart() {
+          const chart = this.channelChart;
+          const metric = this.channelMetric;
+          const labels = {
+            nps: 'NPS',
+            checkout: 'Checkout satisfaction',
+            overall: 'Overall satisfaction'
+          };
+          const colors = {
+            nps: ['#ef4444', '#38bdf8', '#a3aba3', '#4ade80'],
+            checkout: ['#ef4444', '#38bdf8', '#c7ccc7', '#4ade80'],
+            overall: ['#f97316', '#475569', '#475569', '#475569']
+          };
+
+          chart.data.datasets[0].label = labels[metric];
+          chart.data.datasets[0].data = this.channelData[metric];
+          chart.data.datasets[0].backgroundColor = colors[metric];
+          chart.options.scales.y.suggestedMax = metric === 'nps' ? 10 : 5;
+          chart.update();
+        },
+        renderTenureChart() {
+          const ctx = document.getElementById('tenureChart');
+          this.tenureChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: ['New', 'Growing', 'Established', 'Loyal'],
+              datasets: [{
+                label: 'Average NPS',
+                data: [4.486, 5.844, 7.615, 9.309],
+                borderColor: '#4ade80',
+                backgroundColor: 'rgba(74, 222, 128, 0.18)',
+                fill: true,
+                tension: 0.3,
+                pointRadius: 5,
+                pointHoverRadius: 6,
+                pointBackgroundColor: '#4ade80'
+              }]
+            },
+            options: {
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false }
+              },
+              scales: {
+                x: { grid: { display: false } },
+                y: {
+                  beginAtZero: true,
+                  suggestedMax: 10,
+                  grid: { color: 'rgba(163,171,163,0.10)' }
+                }
+              }
+            }
+          });
+        },
+        renderTierChart() {
+          const ctx = document.getElementById('tierChart');
+          this.tierChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: ['None', 'Bronze', 'Silver', 'Gold', 'Platinum'],
+              datasets: [{
+                label: 'Average NPS',
+                data: [4.696, 6.233, 7.452, 8.571, 9.607],
+                borderColor: '#38bdf8',
+                backgroundColor: 'rgba(56, 189, 248, 0.18)',
+                fill: true,
+                tension: 0.3,
+                pointRadius: 5,
+                pointHoverRadius: 6,
+                pointBackgroundColor: '#38bdf8'
+              }]
+            },
+            options: {
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false }
+              },
+              scales: {
+                x: { grid: { display: false } },
+                y: {
+                  beginAtZero: true,
+                  suggestedMax: 10,
+                  grid: { color: 'rgba(163,171,163,0.10)' }
+                }
+              }
+            }
+          });
+        }
+      }
+    }
+  </script>
+</body>
+</html>

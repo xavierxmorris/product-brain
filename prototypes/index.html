@@ -185,6 +185,7 @@
         .prototype-card.checkout { --accent-color: #4ade80; }
         .prototype-card.loyalty { --accent-color: #f97316; }
         .prototype-card.qa { --accent-color: #a78bfa; }
+        .prototype-card.nps { --accent-color: #38bdf8; }
         
         .pulse-ring {
             animation: pulse-ring 2s infinite;
@@ -319,7 +320,7 @@
             </div>
 
             <!-- Prototype Grid -->
-            <div class="grid md:grid-cols-2 gap-6 mb-12">
+            <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6 mb-12">
                 
                 <!-- Checkout Mockup -->
                 <a href="checkout-mockup/" class="block group">
@@ -368,6 +369,33 @@
                         
                         <div class="flex items-center gap-2 text-ember-400 text-sm font-medium">
                             Open Explainer
+                            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- NPS Drivers Dashboard -->
+                <a href="nps-drivers-dashboard/" class="block group">
+                    <div class="glass-card prototype-card nps p-6 relative overflow-hidden h-full">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-lg bg-sky-500/20 flex items-center justify-center text-xl">
+                                📊
+                            </div>
+                            <span class="badge badge-sage text-xs">Dashboard</span>
+                        </div>
+                        
+                        <h3 class="text-xl font-semibold mb-2 text-sage-100 group-hover:text-white transition-colors">
+                            NPS Drivers Dashboard
+                        </h3>
+                        
+                        <p class="text-sage-400 text-sm mb-4">
+                            Stakeholder-facing summary of the updated NPS notebook highlighting the mobile-web gap, top correlations, and tenure effects.
+                        </p>
+                        
+                        <div class="flex items-center gap-2 text-sky-400 text-sm font-medium">
+                            Open Dashboard
                             <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                             </svg>

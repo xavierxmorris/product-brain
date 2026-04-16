@@ -109,7 +109,7 @@ Analyze customer data in Jupyter notebooks, then iteratively explore findings. T
 
 **Why this matters:** Data-backed insights beat gut feelings in stakeholder conversations.
 
-**Try:** Run analysis on the survey data, explore cross-tabs like mobile vs desktop, tenure cohorts, membership tiers. See [example notebook](analysis/notebooks/customer-nps-analysis-q4-2025.ipynb).
+**Try:** Run analysis on the survey data, explore cross-tabs like mobile vs desktop, tenure cohorts, membership tiers. See the [example notebook](analysis/notebooks/customer-nps-analysis-q4-2025.ipynb) and the stakeholder-ready [NPS drivers dashboard prototype](prototypes/nps-drivers-dashboard/index.html).
 
 **Uses:** Data Analyst agent, Insight Explorer agent
 
@@ -312,6 +312,10 @@ Agents are specialized modes you switch to using the **agent picker** (click the
 View prototypes and explainers online at **[digitarald.github.io/product-brain](https://digitarald.github.io/product-brain)**
 
 All HTML prototypes in `prototypes/` are automatically deployed to GitHub Pages on every push to `main`.
+
+- [NPS Drivers Dashboard](prototypes/nps-drivers-dashboard/index.html) — stakeholder summary of the updated NPS notebook
+- [Demo Narrative](prototypes/demo-narrative/index.html) — end-to-end PM workflow walkthrough
+- [Checkout Mockup](prototypes/checkout-mockup/index.html) — one-page checkout concept
 
 ## Getting Started
 

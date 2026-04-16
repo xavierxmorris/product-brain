@@ -19,7 +19,7 @@ This prototype presents a cohesive narrative through the PM workspace:
 1. **The Problem** — 68% cart abandonment, mobile UX crisis, real customer quotes
 2. **Research Deep Dive** — NPS analysis, customer segments, returns insight
 3. **The Solution** — Checkout redesign + Trail Rewards loyalty program
-4. **Prototypes** — Embedded iframes to checkout-mockup and loyalty-v2-explainer
+4. **Prototypes** — Checkout mockup, loyalty explainer, and NPS drivers dashboard deliverable
 5. **Roadmap** — H1 2026 timeline with current progress
 6. **Repository Explorer** — Links to all specs, insights, research, and analysis
 
@@ -30,6 +30,7 @@ This prototype presents a cohesive narrative through the PM workspace:
 - **Real metrics** — All numbers pulled from actual spec and insight files
 - **Customer quotes** — Direct verbatims from usability studies and NPS surveys
 - **Embedded prototypes** — Live iframes of checkout and loyalty explainers
+- **Stakeholder dashboard link-out** — Direct path to the updated NPS drivers dashboard
 - **Mobile responsive** — Works on presenter screens and attendee phones
 - **Conference-ready** — Large text, high contrast, works in bright rooms
 
@@ -67,6 +68,7 @@ Real data pulled from these repository files:
 | Cart abandonment stats | [specs/checkout-redesign.md](../../specs/checkout-redesign.md) |
 | Mobile UX quotes | [insights/mobile-usability-study.md](../../insights/mobile-usability-study.md) |
 | NPS analysis | [insights/nps-drivers-q4.md](../../insights/nps-drivers-q4.md) |
+| Updated NPS dashboard | [prototypes/nps-drivers-dashboard/index.html](../nps-drivers-dashboard/index.html) |
 | Returns insight | [insights/returns-friction-analysis.md](../../insights/returns-friction-analysis.md) |
 | Customer quotes | [insights/customer-feedback-q4.md](../../insights/customer-feedback-q4.md) |
 | Roadmap timeline | [roadmap/2026-h1.md](../../roadmap/2026-h1.md) |

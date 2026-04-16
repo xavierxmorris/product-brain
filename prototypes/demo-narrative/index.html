@@ -1117,6 +1117,26 @@
           <strong class="text-forest-400">Product quality drives promoters.</strong> 67% of promoters cite quality, 52% cite selection. We're not lacking great products—we're losing customers before they experience them.
         </p>
       </div>
+
+      <div class="reveal-item glass-card p-8 border-l-4 border-sky-500 mt-8">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          <div>
+            <span class="badge badge-sage mb-4">New quantitative deliverable</span>
+            <h4 class="text-2xl font-semibold mb-3 text-sage-100">Updated NPS dashboard isolates mobile web from app</h4>
+            <p class="text-sage-400 max-w-2xl">
+              The refreshed notebook view shows mobile web at <strong class="text-crimson-400">5.4 NPS</strong> versus <strong class="text-sage-200">8.4+</strong> across app and desktop, with checkout as the strongest actionable driver.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <a href="../nps-drivers-dashboard/index.html" class="px-5 py-3 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-300 hover:bg-sky-500/20 transition-colors">
+              Open dashboard →
+            </a>
+            <a href="../../analysis/notebooks/customer-nps-analysis-q4-2025.ipynb" class="px-5 py-3 rounded-xl border border-sage-700 text-sage-300 hover:bg-sage-800/30 transition-colors">
+              View notebook
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1283,7 +1303,7 @@
         </p>
       </div>
       
-      <div class="grid md:grid-cols-2 gap-8">
+      <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
         <!-- Checkout Mockup -->
         <div class="reveal-item glass-card overflow-hidden" data-delay="0">
           <div class="prototype-frame aspect-video">
@@ -1325,6 +1345,40 @@
                class="inline-flex items-center gap-2 text-forest-400 hover:text-forest-300 transition-colors text-sm font-medium">
               Open Full Screen →
             </a>
+          </div>
+        </div>
+
+        <div class="reveal-item glass-card overflow-hidden" data-delay="200">
+          <div class="p-6 md:p-8 h-full flex flex-col justify-between bg-gradient-to-br from-sky-500/10 via-transparent to-forest-500/5">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/15 border border-sky-500/25 text-sky-300 text-xs font-semibold mb-5">
+                📊 Dashboard
+              </div>
+              <h3 class="text-xl font-semibold mb-3 text-sage-100">NPS Drivers Dashboard</h3>
+              <p class="text-sage-400 text-sm mb-5">
+                Stakeholder-ready summary of the updated notebook with mobile-web gaps, top NPS correlations, and tenure-tier patterns.
+              </p>
+              <div class="space-y-3 text-sm text-sage-300">
+                <div class="flex items-center justify-between gap-4">
+                  <span>Overall NPS</span>
+                  <span class="text-forest-400 font-semibold">13.35</span>
+                </div>
+                <div class="flex items-center justify-between gap-4">
+                  <span>Top actionable driver</span>
+                  <span class="text-sky-300 font-semibold">Checkout (r=0.923)</span>
+                </div>
+                <div class="flex items-center justify-between gap-4">
+                  <span>Mobile web NPS</span>
+                  <span class="text-crimson-400 font-semibold">5.400</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 pt-6 border-t border-sage-800/40">
+              <a href="../nps-drivers-dashboard/index.html" target="_blank"
+                 class="inline-flex items-center gap-2 text-sky-300 hover:text-sky-200 transition-colors text-sm font-medium">
+                Open Full Screen →
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -1554,6 +1608,14 @@
             <div>
               <div class="text-sage-100 font-medium">NPS Analysis Notebook</div>
               <div class="text-sage-500 text-sm">Python analysis with visualizations</div>
+            </div>
+          </a>
+
+          <a href="../nps-drivers-dashboard/index.html" class="glass-card p-5 flex items-center gap-4 hover:border-forest-500/50 transition-colors">
+            <div class="text-2xl">📊</div>
+            <div>
+              <div class="text-sage-100 font-medium">NPS Drivers Dashboard</div>
+              <div class="text-sage-500 text-sm">Stakeholder summary of the updated notebook</div>
             </div>
           </a>
         </div>
